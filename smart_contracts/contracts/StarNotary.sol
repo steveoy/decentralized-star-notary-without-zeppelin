@@ -6,15 +6,33 @@ contract StarNotary is ERC721Token {
 
     struct Star { 
         string name;
+        string ra;
+        string dec;
+        string mag;
+        string story;
     }
     
     mapping(uint256 => Star) public tokenIdToStarInfo;
 
     mapping(uint256 => uint256) public starsForSale;
 
-    function createStar(string _name, uint256 _tokenId) public { 
-        Star memory newStar = Star(_name);
+    mapping(bytes32 => uint256) public tokenIdByCoordinates;
 
+
+    function checkIfStarExist(bytes32 _starCoordinateHash) public returns (uint256){
+        return tokenIdByCoordinates[_starCoordinateHash];
+    }
+
+    function createStar(string _name, string _ra, string _dec, string _mag, string _story
+    , uint256 _tokenId) public { 
+
+        bytes memory coordinates = abi.encodePacked(_ra,_dec,_mag);
+        bytes32 starCoordinateHash = sha256(coordinates);
+        require(checkIfStarExist(starCoordinateHash) == uint256(0), "Star Already Exist!");
+
+        Star memory newStar = Star(_name, _ra, _dec, _mag, _story);
+
+        tokenIdByCoordinates[starCoordinateHash] = _tokenId;
         tokenIdToStarInfo[_tokenId] = newStar;
 
         ERC721Token.mint(_tokenId);

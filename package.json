@@ -1,7 +1,7 @@
 {
-  "name": "project-5-boilerplate-without-zeppelin",
+  "name": "decentralized-star-notary-without-zeppelin",
   "version": "1.0.0",
-  "description": "",
+  "description": "creating Star Notary Dapp and deploy it to public testnet",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
