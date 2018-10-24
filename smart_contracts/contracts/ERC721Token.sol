@@ -1,8 +1,9 @@
 pragma solidity ^0.4.24; 
 
-import './ERC721.sol';
+import './IERC721.sol';
+import "./IERC721Receiver.sol";
 
-contract ERC721Token is ERC721 {
+contract ERC721Token is IERC721 {
 
     mapping(uint256 => address) tokenToOwner; 
     mapping(address => uint256) ownerToBalance; 
@@ -56,8 +57,10 @@ contract ERC721Token is ERC721 {
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
     /// @param data Additional data with no specified format, sent in call to `_to`
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes data) external payable { 
-        // WILL NOT IMPLEMENT
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes data)   { 
+        transferFrom(_from, _to, _tokenId);
+        // solium-disable-next-line arg-overflow
+        require(_checkOnERC721Received(_from, _to, _tokenId, data));
     }
 
     /// @notice Transfers the ownership of an NFT from one address to another address
@@ -66,8 +69,9 @@ contract ERC721Token is ERC721 {
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId) external payable { 
-        // WILL NOT IMPLEMENT
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId)   { 
+        // solium-disable-next-line arg-overflow
+        safeTransferFrom(_from, _to, _tokenId, "");
     }
 
     /// @notice Transfer ownership of an NFT -- THE CALLER IS RESPONSIBLE
@@ -80,7 +84,7 @@ contract ERC721Token is ERC721 {
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
-    function transferFrom(address _from, address _to, uint256 _tokenId) external payable hasPermission(msg.sender, _tokenId) { 
+    function transferFrom(address _from, address _to, uint256 _tokenId) hasPermission(msg.sender, _tokenId) { 
 
         transferFromHelper(_from, _to, _tokenId);
     }
@@ -134,4 +138,37 @@ contract ERC721Token is ERC721 {
     function isApprovedForAll(address _owner, address _operator) public view returns (bool) { 
         return ownerToOperator[_owner][_operator];
     }
+
+    /**
+   * @dev Internal function to invoke `onERC721Received` on a target address
+   * The call is not executed if the target address is not a contract
+   * @param from address representing the previous owner of the given token ID
+   * @param to target address that will receive the tokens
+   * @param tokenId uint256 ID of the token to be transferred
+   * @param _data bytes optional data to send along with the call
+   * @return whether the call correctly returned the expected magic value
+   */
+  function _checkOnERC721Received(
+    address from,
+    address to,
+    uint256 tokenId,
+    bytes _data
+  )
+    internal
+    returns (bool)
+  {
+    if (!isContract(to)) {
+      return true;
+    }
+    bytes4 retval = IERC721Receiver(to).onERC721Received(
+      msg.sender, from, tokenId, _data);
+    return (retval == IERC721Receiver(0).onERC721Received.selector);
+  }
+
+    function isContract(address account) internal view returns (bool) {
+    uint256 size;
+    // solium-disable-next-line security/no-inline-assembly
+    assembly { size := extcodesize(account) }
+    return size > 0;
+  }
 }

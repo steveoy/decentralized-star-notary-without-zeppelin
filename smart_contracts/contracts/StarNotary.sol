@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import './ERC721Token.sol';
+import "./ERC721Token.sol";
 
 contract StarNotary is ERC721Token { 
 
@@ -19,16 +19,15 @@ contract StarNotary is ERC721Token {
     mapping(bytes32 => uint256) public tokenIdByCoordinates;
 
 
-    function checkIfStarExist(bytes32 _starCoordinateHash) public returns (uint256){
-        return tokenIdByCoordinates[_starCoordinateHash];
+    function checkIfStarExist(bytes32 _starCoordinateHash) public view returns (bool){
+        return tokenIdByCoordinates[_starCoordinateHash] == uint256(0);
     }
 
-    function createStar(string _name, string _ra, string _dec, string _mag, string _story
-    , uint256 _tokenId) public { 
+    function createStar(string _name, string _ra, string _dec, string _mag, string _story, uint256 _tokenId) public { 
 
         bytes memory coordinates = abi.encodePacked(_ra,_dec,_mag);
         bytes32 starCoordinateHash = sha256(coordinates);
-        require(checkIfStarExist(starCoordinateHash) == uint256(0), "Star Already Exist!");
+        require(checkIfStarExist(starCoordinateHash), "Star Already Exist!");
 
         Star memory newStar = Star(_name, _ra, _dec, _mag, _story);
 
