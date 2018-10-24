@@ -1,19 +1,36 @@
-pragma solidity ^0.4.23;
-
-import './ERC721Token.sol';
-
-contract StarNotary is ERC721Token { 
-
+pragma solidity >=0.4.0 <0.6.0;
+import './ERC721Token.sol'; 
+import { ConcatHelper } from "./ConcatHelper.sol";
+contract StarNotary is ERC721Token {  
+    
     struct Star { 
         string name;
-    }
-    
+        bytes ra;
+        bytes dec;
+        bytes mag;
+        string story;
+    } 
+
+
     mapping(uint256 => Star) public tokenIdToStarInfo;
 
     mapping(uint256 => uint256) public starsForSale;
 
-    function createStar(string _name, uint256 _tokenId) public { 
-        Star memory newStar = Star(_name);
+    mapping(bytes => uint256) public tokenIdByCoordinates;
+
+
+    function IsStarExist(bytes _starCoordinateHash) public returns (uint256){
+        return tokenIdByCoordinates[_starCoordinateHash];
+    }
+
+    function createStar(string _name, bytes _ra, bytes _dec, bytes _mag, string _story
+    , uint256 _tokenId) public { 
+
+        bytes memory coordinates = ConcatHelper.concat(_ra,_dec,_mag);
+        bytes starCoordinateHash = sha256(coordinates); 
+
+        require(IsStarExist(starCoordinateHash) == bytes32(0));
+        Star memory newStar = Star(_name, _ra, _dec, _mag, _story);
 
         tokenIdToStarInfo[_tokenId] = newStar;
 
