@@ -1,37 +1,38 @@
-pragma solidity >=0.4.0 <0.6.0;
-import './ERC721Token.sol'; 
-import { ConcatHelper } from "./ConcatHelper.sol";
-contract StarNotary is ERC721Token {  
-    
+pragma solidity ^0.4.23;
+
+import './ERC721Token.sol';
+
+contract StarNotary is ERC721Token { 
+
     struct Star { 
         string name;
-        bytes ra;
-        bytes dec;
-        bytes mag;
+        string ra;
+        string dec;
+        string mag;
         string story;
-    } 
-
-
+    }
+    
     mapping(uint256 => Star) public tokenIdToStarInfo;
 
     mapping(uint256 => uint256) public starsForSale;
 
-    mapping(bytes => uint256) public tokenIdByCoordinates;
+    mapping(bytes32 => uint256) public tokenIdByCoordinates;
 
 
-    function IsStarExist(bytes _starCoordinateHash) public returns (uint256){
+    function checkIfStarExist(bytes32 _starCoordinateHash) public returns (uint256){
         return tokenIdByCoordinates[_starCoordinateHash];
     }
 
-    function createStar(string _name, bytes _ra, bytes _dec, bytes _mag, string _story
+    function createStar(string _name, string _ra, string _dec, string _mag, string _story
     , uint256 _tokenId) public { 
 
-        bytes memory coordinates = ConcatHelper.concat(_ra,_dec,_mag);
-        bytes starCoordinateHash = sha256(coordinates); 
+        bytes memory coordinates = abi.encodePacked(_ra,_dec,_mag);
+        bytes32 starCoordinateHash = sha256(coordinates);
+        require(checkIfStarExist(starCoordinateHash) == uint256(0), "Star Already Exist!");
 
-        require(IsStarExist(starCoordinateHash) == bytes32(0));
         Star memory newStar = Star(_name, _ra, _dec, _mag, _story);
 
+        tokenIdByCoordinates[starCoordinateHash] = _tokenId;
         tokenIdToStarInfo[_tokenId] = newStar;
 
         ERC721Token.mint(_tokenId);

@@ -1,6 +1,6 @@
-var MyContract = artifacts.require("./StarNotary.sol");
+var StarNotaryContract = artifacts.require("./StarNotary.sol");
 
 module.exports = function(deployer) {
-  // deployment steps
-  deployer.deploy(MyContract);
+  // Deploy the Migrations contract as our only task
+  deployer.deploy(StarNotaryContract);
 };
