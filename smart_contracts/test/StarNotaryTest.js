@@ -1,5 +1,4 @@
 const StarNotary = artifacts.require('StarNotary');
-const SHA256 = require('crypto-js/sha256');
 
 contract('StarNotary', accounts => {
 
@@ -7,6 +6,7 @@ contract('StarNotary', accounts => {
         this.contract = await StarNotary.new({ from: accounts[0] })
     })
 
+    //testing for createStar()
     describe('can create a star', () => {
         it('can create a star and get its contents', async function () {
             let tokenId = 1;
@@ -45,6 +45,7 @@ contract('StarNotary', accounts => {
         })
     })
 
+    
     describe('buying and selling stars', () => {
 
         let user1 = accounts[1]
@@ -58,6 +59,7 @@ contract('StarNotary', accounts => {
             await this.contract.createStar(name, ra, dec, mag, story, starId, { from: user1 })
         })
 
+        //testing for putStarUpForSale() 
         describe('user1 can sell a star', () => {
             it('user1 can put up their star for sale', async function () {
                 await this.contract.putStarUpForSale(starId, starPrice, { from: user1 })
@@ -79,6 +81,7 @@ contract('StarNotary', accounts => {
             })
         })
 
+        //testing for buyStar()
         describe('user2 can buy a star that was put up for sale', () => {
             beforeEach(async function () {
                 await this.contract.putStarUpForSale(starId, starPrice, { from: user1 })
@@ -110,9 +113,17 @@ contract('StarNotary', accounts => {
 
             var [name, ra, dec, mag, story] = ['Awesome Star!', 'ra_032.155', 'dec_121.874', 'mag_245.978', 'I love my wonderful star']
             await this.contract.createStar(name, ra, dec, mag, story, tokenId, { from: user1 })
-            let starCoorditatesHash = SHA256(ra + dec + mag).toString();  
             
-            assert.isFalse(await this.contract.checkIfStarExist(starCoorditatesHash, {from: user1}), "FALSE!");
+            var [name1, ra1, dec1, mag1, story1] = await this.contract.tokenIdToStarInfo(tokenId);
+
+            assert.equal(name, name1);
+            assert.equal(ra, ra1);
+            assert.equal(dec, dec1);
+            assert.equal(mag, mag1);
+            assert.equal(story, story1); 
         })
     })
+
+
+    //TODO: starsForSale(), tokenIdToStarInfo()
 })
