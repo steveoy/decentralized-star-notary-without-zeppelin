@@ -18,15 +18,31 @@ contract StarNotary is ERC721Token {
 
     mapping(bytes32 => uint256) public tokenIdByCoordinates;
 
+    event starClaimed(address owner);
 
     function checkIfStarExist(bytes32 _starCoordinateHash) public view returns (bool){
         return tokenIdByCoordinates[_starCoordinateHash] == uint256(0);
     }
 
-    function createStar(string _name, string _ra, string _dec, string _mag, string _story, uint256 _tokenId) public { 
-
+    function generateStarCoordinatesHash(string _ra, string _dec, string _mag) private pure returns(bytes32){
         bytes memory coordinates = abi.encodePacked(_ra,_dec,_mag);
         bytes32 starCoordinateHash = sha256(coordinates);
+        return starCoordinateHash;
+    }
+    function claimStar(string _name, string _ra, string _dec, string _mag, string _story) public returns(uint256){
+        //generate unique star/token ID
+        uint256 starID = uint256(generateStarCoordinatesHash(_ra,_dec,_mag)); 
+
+        //createStar
+         createStar(_name, _ra, _dec, _mag, _story, starID);
+ 
+         emit starClaimed(msg.sender);
+        //return star/token ID
+        return starID;
+    }
+
+    function createStar(string _name, string _ra, string _dec, string _mag, string _story, uint256 _tokenId) public { 
+        bytes32 starCoordinateHash = generateStarCoordinatesHash(_ra,_dec,_mag);
         require(checkIfStarExist(starCoordinateHash), "Star Already Exist!");
 
         Star memory newStar = Star(_name, _ra, _dec, _mag, _story);
