@@ -2,7 +2,7 @@
 
 Notarizing ownership of digital assets by implementing a Star notary smart contarct and utilizing the concept of non-fungible tokens (ERC721)
 
-![Demo](https://i.imgur.com/1o8wIjH.gifv)
+![Demo](https://i.imgur.com/s786MV6.gif)
 
 ## Project Overview
 The goal is to allow users to notarize star ownership using their blockchain identity (Metamask wallet):
