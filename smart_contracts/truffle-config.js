@@ -12,7 +12,7 @@
  *   },
  */
 var HDWalletProvider = require("truffle-hdwallet-provider");
-var mnemonic = "minute select jealous unhappy gadget decline genre sick fox shop oppose owner";
+var mnemonic = "correct frame spy stuff today fiction fix clay current liberty feed clever";
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
