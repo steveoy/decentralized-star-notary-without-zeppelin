@@ -2,15 +2,14 @@
 
 Notarizing ownership of digital assets by implementing a Star notary smart contarct and utilizing the concept of non-fungible tokens (ERC721)
 
-![Demo][ClaimingStar]
-[ClaimingStar]: https://i.imgur.com/s786MV6.gif
+![Demo](https://i.imgur.com/s786MV6.gif) 
 
 ## Project Overview
 The goal is to allow users to notarize star ownership using their blockchain identity (Metamask wallet). Below are the steps taken to develop this Dapp:
 
 | - | Description |
 | ------- | ----------- |
-| [Part 1](#1.-implementation) | implementing StarNotary smart contract with functions to support proof of existence (i.e. notarization) |
+| [Part 1](#1.implementation) | implementing StarNotary smart contract with functions to support proof of existence (i.e. notarization) |
 | Part 2 | Testing smart contracts code coverage |
 | Part 3 | Deploying smart contracts on a public test network (Rinkeby) |
 | Part 4 | interacting with StarNotar smart contract |
@@ -84,7 +83,9 @@ _https://rinkeby.etherscan.io/address/0xa0e2aeb9e94051adefce53fb131d5c5f3fb7da22
 
 ### 4. Interaction with smart contart
 * Claim a new star
-![Demo][ClaimingStar]
+
+![Demo](https://i.imgur.com/s786MV6.gif)
 
 * Lookup a star by ID using `tokenIdToStarInfo()`
+
 ![GettingStarInfo](https://i.imgur.com/0fvdrhZ.gif)
