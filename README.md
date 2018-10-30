@@ -84,11 +84,13 @@ _https://rinkeby.etherscan.io/address/0xa0e2aeb9e94051adefce53fb131d5c5f3fb7da22
 
 ### Interaction with smart contart
 * Claim a new star
+
 __Transaction ID__: [0x746ab7bf7bf689429fb8c642c7ae1d94f7bc11b25628edf7175291ebf9517107](https://rinkeby.etherscan.io/tx/0x746ab7bf7bf689429fb8c642c7ae1d94f7bc11b25628edf7175291ebf9517107)
 
 ![Demo](https://i.imgur.com/s786MV6.gif)
 
 * Put star up for sale
+
 __Transaction ID__: [0x78f2ed71223a86046efba37d413ee22a3a6a7e5ab78b73278d35e818f8cff120](https://rinkeby.etherscan.io/tx/0x78f2ed71223a86046efba37d413ee22a3a6a7e5ab78b73278d35e818f8cff120)
 
 ![Demo](https://i.imgur.com/3Q8ChbS.gif)
